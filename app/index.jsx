@@ -7,7 +7,8 @@ import { Redirect, router } from "expo-router";
 import { useGlobalContext } from "../context/GlobalProvider";
 
 export default function Page() {
-  const { isLoggedIn, isLoading } = useGlobalContext();
+  const { isLoggedIn, isLoading} = useGlobalContext();
+  
   console.log(isLoggedIn, isLoading);
   
   if (!isLoading && isLoggedIn) return <Redirect href="/home" />

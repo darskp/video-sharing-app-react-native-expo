@@ -26,8 +26,8 @@ const SignUp = () => {
     try {
       const result = await createUser(form.email, form.username, form.password)
       setUser(result);
-      Alert.alert('Success', "Your Account has been created successfully! Please Sign-in")
       setIsLoggedIn(true)
+      Alert.alert('Success', "Your Account has been created successfully! Please Sign-in")
       router.replace('/sign-in')
     } catch (error) {
       console.log("error", error);
