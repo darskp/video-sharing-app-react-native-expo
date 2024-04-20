@@ -3,9 +3,15 @@ import { Text, View, Image, ScrollView } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { images } from "../constants";
 import CustomButton from "../components/CustomButton";
-import { router } from "expo-router";
+import { Redirect, router } from "expo-router";
+import { useGlobalContext } from "../context/GlobalProvider";
 
 export default function Page() {
+  const { isLoggedIn, isLoading } = useGlobalContext();
+  console.log(isLoggedIn, isLoading);
+  
+  if (!isLoading && isLoggedIn) return <Redirect href="/home" />
+  
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView
@@ -40,10 +46,10 @@ export default function Page() {
           </Text>
           <CustomButton
             title="Continue with Email"
-            handlePress={()=>router.push('/sign-in')}
+            handlePress={() => router.push('/sign-in')}
             containerStyle="w-full mt-7"
           />
-          <StatusBar backgroundColor="#161622" style="light"/>
+          <StatusBar backgroundColor="#161622" style="light" />
         </View>
       </ScrollView>
     </SafeAreaView>
