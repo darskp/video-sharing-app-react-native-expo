@@ -12,21 +12,22 @@ import { useGlobalContext } from '../../context/GlobalProvider'
 
 const Home = () => {
   const { data: posts, isLoading, refetch } = useAppwrite(getAllPost);
-  const { data: latestPosts,  } = useAppwrite(getLatestPosts);
+  const { data: latestPosts, } = useAppwrite(getLatestPosts);
   const [refreshing, setRefreshing] = useState(false)
-  const { isLoggedIn, setIsLoggedIn, user, setUser,  } = useGlobalContext();
+  const { isLoggedIn, setIsLoggedIn, user, setUser, } = useGlobalContext();
 
-  console.log(user.username);
-  const onRefresh = async() => {
+  // console.log(posts, "i am on");
+
+  const onRefresh = async () => {
     setRefreshing(true)
     await refetch();
     setRefreshing(false)
   }
+
   return (
     <SafeAreaView className="bg-primary h-full">
       <FlatList
         data={posts}
-        // data={[]}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => (
           <VideoCard
@@ -40,7 +41,6 @@ const Home = () => {
                 <Text className="font-pmedium text-sm text-gray-100">Welcome Back,</Text>
                 <Text className="text-2xl font-psemibold text-white">{user?.username}</Text>
               </View>
-
               <View className="mt-1.5">
                 <Image
                   source={images.logoSmall}
@@ -52,7 +52,7 @@ const Home = () => {
 
             <SearchInput />
 
-            <View className="w-full flex-1 pt-5 pb-8">
+            <View className="w-full flex-1 pt-5 pb-2">
               <Text className="text-gray-100 text-lg font-pregular">
                 Latest Videos
               </Text>

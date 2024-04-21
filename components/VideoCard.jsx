@@ -2,10 +2,22 @@ import { View, Text, Image, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { icons } from '../constants'
 import { ResizeMode, Video } from 'expo-av';
+import { useGlobalContext } from '../context/GlobalProvider';
 
-const VideoCard = ({ video: { title, thumbnail, video, creator: { username, avatar } } }) => {
+const VideoCard = ({ video: { title, thumbnail, video, $id, creator: { username, avatar, liked } } }) => {
 
     const [play, setplay] = useState(false);
+    const { isLoggedIn, setIsLoggedIn, user, setUser, } = useGlobalContext();
+    // console.log(video,"i am on the videocard");
+
+    const handleSaved = ($id, liked) => {
+        const existLikedItem = liked.some((id) => id == $id);
+        console.log(!existLikedItem);
+        if (!existLikedItem) {
+            liked.push($id)
+        }
+        console.log("hi", liked)
+    }
 
     return (
         <View className="flex-col items-center px-4 mb-14">
@@ -32,11 +44,14 @@ const VideoCard = ({ video: { title, thumbnail, video, creator: { username, avat
                 </View>
 
                 <View className="pt-2">
-                    <Image
-                        source={icons.menu}
-                        resizeMode='contain'
-                        className="w-5 h-5"
-                    />
+                    <TouchableOpacity onPress={() => handleSaved($id, liked)}>
+                        <Image
+                            source={icons.menu}
+                            resizeMode='contain'
+                            className="w-5 h-5"
+                        />
+                    </TouchableOpacity>
+
                 </View>
 
 
@@ -50,7 +65,7 @@ const VideoCard = ({ video: { title, thumbnail, video, creator: { username, avat
                         resizeMode={ResizeMode.CONTAIN}
                         useNativeControls
                         shouldPlay
-                        onPlaybackStatusUpdate={(status ) => {
+                        onPlaybackStatusUpdate={(status) => {
                             if (status.didJustFinish) {
                                 setplay(false);
                             }
