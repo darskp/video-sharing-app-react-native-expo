@@ -17,8 +17,6 @@ const Search = () => {
     refetch()
   }, [query])
 
-  console.log(posts,query);
-
   return (
     <SafeAreaView className="bg-primary h-full">
       <FlatList

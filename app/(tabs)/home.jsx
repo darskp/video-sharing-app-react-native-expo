@@ -12,17 +12,23 @@ import { useGlobalContext } from '../../context/GlobalProvider'
 
 const Home = () => {
   const { data: posts, isLoading, refetch } = useAppwrite(getAllPost);
-  const { data: latestPosts, } = useAppwrite(getLatestPosts);
+  const { data: latestPosts } = useAppwrite(getLatestPosts);
   const [refreshing, setRefreshing] = useState(false)
   const { isLoggedIn, setIsLoggedIn, user, setUser, } = useGlobalContext();
-
-  // console.log(posts, "i am on");
 
   const onRefresh = async () => {
     setRefreshing(true)
     await refetch();
     setRefreshing(false)
   }
+
+  const fetchData = async () => {
+    await refetch();
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -50,7 +56,7 @@ const Home = () => {
               </View>
             </View>
 
-            <SearchInput />
+            <SearchInput initialQuery="" placeholder="Search for a video topic" />
 
             <View className="w-full flex-1 pt-5 pb-2">
               <Text className="text-gray-100 text-lg font-pregular">

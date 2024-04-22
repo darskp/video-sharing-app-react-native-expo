@@ -1,23 +1,26 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { icons } from '../constants'
 import { ResizeMode, Video } from 'expo-av';
 import { useGlobalContext } from '../context/GlobalProvider';
+import { getAllPost, updateLiked } from '../lib/appwrite';
 
 const VideoCard = ({ video: { title, thumbnail, video, $id, creator: { username, avatar, liked } } }) => {
 
     const [play, setplay] = useState(false);
-    const { isLoggedIn, setIsLoggedIn, user, setUser, } = useGlobalContext();
-    // console.log(video,"i am on the videocard");
+    const { user } = useGlobalContext();
 
-    const handleSaved = ($id, liked) => {
-        const existLikedItem = liked.some((id) => id == $id);
-        console.log(!existLikedItem);
-        if (!existLikedItem) {
-            liked.push($id)
-        }
-        console.log("hi", liked)
-    }
+    const [isLiked, setIsLiked] = useState(user.liked.includes($id)); 
+
+    useEffect(() => {
+        setIsLiked(user.liked.includes($id)); 
+    }, [user.liked, $id]);
+
+    const handleSaved = async () => {
+        await updateLiked($id, user);
+        setIsLiked(!isLiked); 
+    };
+    console.log("liked======>",user.liked);
 
     return (
         <View className="flex-col items-center px-4 mb-14">
@@ -42,15 +45,28 @@ const VideoCard = ({ video: { title, thumbnail, video, $id, creator: { username,
                     </View>
 
                 </View>
-
                 <View className="pt-2">
-                    <TouchableOpacity onPress={() => handleSaved($id, liked)}>
+                    <TouchableOpacity onPress={handleSaved}>
+                        {isLiked ?
                         <Image
-                            source={icons.menu}
+                            source={icons.filledheart}
+                            resizeMode='contain'
+                            className="w-5 h-5"
+                        /> :
+                        <Image
+                            source={icons.outlineheart}
                             resizeMode='contain'
                             className="w-5 h-5"
                         />
+                        }
                     </TouchableOpacity>
+                </View>
+                <View className="pt-2">
+                    <Image
+                        source={icons.menu}
+                        resizeMode='contain'
+                        className="w-5 h-5"
+                    />
 
                 </View>
 

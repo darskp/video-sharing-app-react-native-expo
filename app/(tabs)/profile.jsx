@@ -1,5 +1,5 @@
 import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import EmptyState from '../../components/EmptyState'
 import { getUserPosts, signOut } from '../../lib/appwrite'
@@ -12,7 +12,7 @@ import { router } from 'expo-router'
 
 const Profle = () => {
   const { isLoggedIn, setIsLoggedIn, user, setUser, isLoading } = useGlobalContext();
-  const { data: posts } = useAppwrite(() => getUserPosts(user.$id));
+  const { data: posts, refetch } = useAppwrite(() => getUserPosts(user.$id));
 
   const logout = async () => {
     await signOut();
@@ -20,6 +20,14 @@ const Profle = () => {
     setIsLoggedIn(false);
     router.replace('/sign-in')
   }
+
+  const fetchData = async () => {
+    await refetch();
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   return (
     <SafeAreaView className="bg-primary h-full">
