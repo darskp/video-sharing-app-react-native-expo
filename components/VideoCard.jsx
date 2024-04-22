@@ -10,17 +10,18 @@ const VideoCard = ({ video: { title, thumbnail, video, $id, creator: { username,
     const [play, setplay] = useState(false);
     const { user } = useGlobalContext();
 
-    const [isLiked, setIsLiked] = useState(user.liked.includes($id)); 
+    const [isLiked, setIsLiked] = useState(user?.liked?.includes($id) || false );
 
     useEffect(() => {
-        setIsLiked(user.liked.includes($id)); 
+        if (user?.liked) {
+            setIsLiked(user?.liked?.includes($id));
+        }
     }, [user.liked, $id]);
 
     const handleSaved = async () => {
         await updateLiked($id, user);
-        setIsLiked(!isLiked); 
+        setIsLiked(!isLiked);
     };
-    console.log("liked======>",user.liked);
 
     return (
         <View className="flex-col items-center px-4 mb-14">
@@ -48,16 +49,16 @@ const VideoCard = ({ video: { title, thumbnail, video, $id, creator: { username,
                 <View className="pt-2">
                     <TouchableOpacity onPress={handleSaved}>
                         {isLiked ?
-                        <Image
-                            source={icons.filledheart}
-                            resizeMode='contain'
-                            className="w-5 h-5"
-                        /> :
-                        <Image
-                            source={icons.outlineheart}
-                            resizeMode='contain'
-                            className="w-5 h-5"
-                        />
+                            <Image
+                                source={icons.filledheart}
+                                resizeMode='contain'
+                                className="w-5 h-5"
+                            /> :
+                            <Image
+                                source={icons.outlineheart}
+                                resizeMode='contain'
+                                className="w-5 h-5"
+                            />
                         }
                     </TouchableOpacity>
                 </View>

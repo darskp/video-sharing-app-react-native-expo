@@ -15,7 +15,7 @@ const Bookmark = () => {
 
   useEffect(() => {
     if (user?.liked && posts) {
-      const filteredPosts = posts.filter(post => user.liked.includes(post.$id));
+      const filteredPosts = posts.filter(post => user?.liked?.includes(post?.$id));
       setFilteredPosts(filteredPosts);
     }
   }, [user.liked, posts]);
@@ -37,7 +37,7 @@ const Bookmark = () => {
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView className="my-6">
-        <Text className="text-2xl px-4 text-white font-psemibold mt-10 my-6 space-y-6">
+        <Text className="text-2xl px-4 text-white font-psemibold mt-10 ">
           Saved Videos
         </Text>
         <FlatList
